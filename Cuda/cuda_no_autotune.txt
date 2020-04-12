@@ -1,0 +1,238 @@
+Extract tasks...
+fn (%data: Tensor[(1, 3, 224, 224), float32], %v15: Tensor[(32, 3, 3, 3), float32], %v14: Tensor[(32), float32], %v35: Tensor[(10, 1577088), float32], %v34: Tensor[(10), float32]) -> Tensor[(1, 10), float32] {
+  %0 = nn.conv2d(%data, %v15, padding=[0, 0, 0, 0], channels=32, kernel_size=[3, 3]) /* ty=Tensor[(1, 32, 222, 222), float32] */;
+  %1 = nn.bias_add(%0, %v14) /* ty=Tensor[(1, 32, 222, 222), float32] */;
+  %2 = nn.relu(%1) /* ty=Tensor[(1, 32, 222, 222), float32] */;
+  %3 = reshape(%2, newshape=[-1, 1577088]) /* ty=Tensor[(1, 1577088), float32] */;
+  %4 = multiply(%3, 1f /* ty=float32 */) /* ty=Tensor[(1, 1577088), float32] */;
+  %5 = transpose(%v35, axes=[1, 0]) /* ty=Tensor[(1577088, 10), float32] */;
+  %6 = multiply(%5, 1f /* ty=float32 */) /* ty=Tensor[(1577088, 10), float32] */;
+  %7 = transpose(%6, axes=[1, 0]) /* ty=Tensor[(10, 1577088), float32] */;
+  %8 = nn.dense(%4, %7, units=10) /* ty=Tensor[(1, 10), float32] */;
+  %9 = nn.bias_add(%8, %v34) /* ty=Tensor[(1, 10), float32] */;
+  %10 = nn.softmax(%9, axis=1) /* ty=Tensor[(1, 10), float32] */;
+  nn.softmax(%10) /* ty=Tensor[(1, 10), float32] */
+}
+Tuning...
+Compile...
+extern "C" __global__ void fused_nn_conv2d_kernel0(void* __restrict__ placeholder, void* __restrict__ placeholder1, void* __restrict__ compute) {
+   float compute_local[8];
+  __shared__ float pad_temp_shared[96];
+  __shared__ float placeholder_shared[864];
+  for (int yy_c_init = 0; yy_c_init < 2; ++yy_c_init) {
+    compute_local[(yy_c_init)] = 0.000000e+00f;
+    compute_local[((yy_c_init + 2))] = 0.000000e+00f;
+    compute_local[((yy_c_init + 4))] = 0.000000e+00f;
+    compute_local[((yy_c_init + 6))] = 0.000000e+00f;
+  }
+  for (int ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner = 0; ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner < 2; ++ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) {
+    pad_temp_shared[((((((int)threadIdx.z) * 12) + (((int)threadIdx.x) * 2)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner))] = (( float*)placeholder)[((((((((((((int)threadIdx.z) * 12) + (((int)threadIdx.x) * 2)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) >> 5) * 50176) + (((int)blockIdx.y) * 448)) + ((((((((int)threadIdx.z) * 12) + (((int)threadIdx.x) * 2)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) & 31) >> 3) * 224)) + (((int)blockIdx.x) * 6)) + ((((((int)threadIdx.z) * 12) + (((int)threadIdx.x) * 2)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) & 7)))];
+  }
+  for (int ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner1 = 0; ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner1 < 18; ++ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner1) {
+    placeholder_shared[((((((int)threadIdx.z) * 108) + (((int)threadIdx.x) * 18)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner1))] = (( float*)placeholder1)[((((((int)threadIdx.z) * 108) + (((int)threadIdx.x) * 18)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner1))];
+  }
+  __syncthreads();
+  for (int rc_inner = 0; rc_inner < 3; ++rc_inner) {
+    for (int ry_inner = 0; ry_inner < 3; ++ry_inner) {
+      for (int rx_inner = 0; rx_inner < 3; ++rx_inner) {
+        for (int yy_c = 0; yy_c < 2; ++yy_c) {
+          compute_local[(yy_c)] = (compute_local[(yy_c)] + (pad_temp_shared[((((((rc_inner * 32) + (yy_c * 8)) + (ry_inner * 8)) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[(((((((int)threadIdx.z) * 27) + (rc_inner * 9)) + (ry_inner * 3)) + rx_inner))]));
+          compute_local[((yy_c + 2))] = (compute_local[((yy_c + 2))] + (pad_temp_shared[((((((rc_inner * 32) + (yy_c * 8)) + (ry_inner * 8)) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[((((((((int)threadIdx.z) * 27) + (rc_inner * 9)) + (ry_inner * 3)) + rx_inner) + 216))]));
+          compute_local[((yy_c + 4))] = (compute_local[((yy_c + 4))] + (pad_temp_shared[((((((rc_inner * 32) + (yy_c * 8)) + (ry_inner * 8)) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[((((((((int)threadIdx.z) * 27) + (rc_inner * 9)) + (ry_inner * 3)) + rx_inner) + 432))]));
+          compute_local[((yy_c + 6))] = (compute_local[((yy_c + 6))] + (pad_temp_shared[((((((rc_inner * 32) + (yy_c * 8)) + (ry_inner * 8)) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[((((((((int)threadIdx.z) * 27) + (rc_inner * 9)) + (ry_inner * 3)) + rx_inner) + 648))]));
+        }
+      }
+    }
+  }
+  for (int yy_inner_inner_inner = 0; yy_inner_inner_inner < 2; ++yy_inner_inner_inner) {
+    (( float*)compute)[((((((((int)threadIdx.z) * 49284) + (((int)blockIdx.y) * 444)) + (yy_inner_inner_inner * 222)) + (((int)blockIdx.x) * 6)) + ((int)threadIdx.x)))] = compute_local[(yy_inner_inner_inner)];
+    (( float*)compute)[(((((((((int)threadIdx.z) * 49284) + (((int)blockIdx.y) * 444)) + (yy_inner_inner_inner * 222)) + (((int)blockIdx.x) * 6)) + ((int)threadIdx.x)) + 394272))] = compute_local[((yy_inner_inner_inner + 2))];
+    (( float*)compute)[(((((((((int)threadIdx.z) * 49284) + (((int)blockIdx.y) * 444)) + (yy_inner_inner_inner * 222)) + (((int)blockIdx.x) * 6)) + ((int)threadIdx.x)) + 788544))] = compute_local[((yy_inner_inner_inner + 4))];
+    (( float*)compute)[(((((((((int)threadIdx.z) * 49284) + (((int)blockIdx.y) * 444)) + (yy_inner_inner_inner * 222)) + (((int)blockIdx.x) * 6)) + ((int)threadIdx.x)) + 1182816))] = compute_local[((yy_inner_inner_inner + 6))];
+  }
+}
+
+extern "C" __global__ void fused_transpose_kernel0(void* __restrict__ T_transpose, void* __restrict__ placeholder) {
+  for (int ax0_ax1_fused_outer = 0; ax0_ax1_fused_outer < 61; ++ax0_ax1_fused_outer) {
+    if ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 15770880) {
+      (( float*)T_transpose)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = (( float*)placeholder)[(((((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) % 1577088) * 10) + ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) / 1577088)))];
+    }
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel3(void* __restrict__ T_softmax_norm, float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+  if (((int)threadIdx.x) < 10) {
+    (( float*)T_softmax_norm)[(((int)threadIdx.x))] = (T_softmax_exp[(((int)threadIdx.x))] / T_softmax_expsum[(0)]);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel2(float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+   float T_softmax_expsum_rf[1];
+  __shared__ float red_buf0[64];
+  T_softmax_expsum_rf[(0)] = 0.000000e+00f;
+  if (((int)threadIdx.x) < 10) {
+    T_softmax_expsum_rf[(0)] = (T_softmax_expsum_rf[(0)] + T_softmax_exp[(((int)threadIdx.x))]);
+  }
+  __syncthreads();
+  ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = T_softmax_expsum_rf[(0)];
+  __syncthreads();
+  if (((int)threadIdx.x) < 32) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 32))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) < 16) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 16))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 8))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 4))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 2))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 1))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) == 0) {
+    T_softmax_expsum[(0)] = ((volatile  float*)red_buf0)[(0)];
+  }
+}
+
+extern "C" __global__ void fused_nn_relu_kernel0(void* __restrict__ T_relu, void* __restrict__ placeholder) {
+  for (int ax0_ax1_fused_ax2_fused_ax3_fused_outer = 0; ax0_ax1_fused_ax2_fused_ax3_fused_outer < 7; ++ax0_ax1_fused_ax2_fused_ax3_fused_outer) {
+    if ((((ax0_ax1_fused_ax2_fused_ax3_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 1577088) {
+      (( float*)T_relu)[((((ax0_ax1_fused_ax2_fused_ax3_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = max((( float*)placeholder)[((((ax0_ax1_fused_ax2_fused_ax3_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))], 0.000000e+00f);
+    }
+  }
+}
+
+extern "C" __global__ void fused_transpose_1_kernel0(void* __restrict__ T_transpose, void* __restrict__ placeholder) {
+  for (int ax0_ax1_fused_outer = 0; ax0_ax1_fused_outer < 61; ++ax0_ax1_fused_outer) {
+    if ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 15770880) {
+      (( float*)T_transpose)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = (( float*)placeholder)[(((((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) % 10) * 1577088) + ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) / 10)))];
+    }
+  }
+}
+
+extern "C" __global__ void fused_nn_bias_add_1_kernel0(void* __restrict__ T_add, void* __restrict__ placeholder, void* __restrict__ placeholder1) {
+  for (int ax0_ax1_fused_ax2_fused_ax3_fused_outer = 0; ax0_ax1_fused_ax2_fused_ax3_fused_outer < 7; ++ax0_ax1_fused_ax2_fused_ax3_fused_outer) {
+    if ((((ax0_ax1_fused_ax2_fused_ax3_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 1577088) {
+      (( float*)T_add)[((((ax0_ax1_fused_ax2_fused_ax3_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = ((( float*)placeholder)[((((ax0_ax1_fused_ax2_fused_ax3_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] + (( float*)placeholder1)[(((((ax0_ax1_fused_ax2_fused_ax3_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) / 49284))]);
+    }
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel2(float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+   float T_softmax_expsum_rf[1];
+  __shared__ float red_buf0[64];
+  T_softmax_expsum_rf[(0)] = 0.000000e+00f;
+  if (((int)threadIdx.x) < 10) {
+    T_softmax_expsum_rf[(0)] = (T_softmax_expsum_rf[(0)] + T_softmax_exp[(((int)threadIdx.x))]);
+  }
+  __syncthreads();
+  ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = T_softmax_expsum_rf[(0)];
+  __syncthreads();
+  if (((int)threadIdx.x) < 32) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 32))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) < 16) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 16))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 8))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 4))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 2))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 1))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) == 0) {
+    T_softmax_expsum[(0)] = ((volatile  float*)red_buf0)[(0)];
+  }
+}
+
+extern "C" __global__ void fused_multiply_1_kernel0(void* __restrict__ T_multiply, void* __restrict__ placeholder, void* __restrict__ placeholder1) {
+  for (int ax0_ax1_fused_outer = 0; ax0_ax1_fused_outer < 61; ++ax0_ax1_fused_outer) {
+    if ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 15770880) {
+      (( float*)T_multiply)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = ((( float*)placeholder)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] * (( float*)placeholder1)[(0)]);
+    }
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel0(float* __restrict__ T_softmax_maxelem, void* __restrict__ placeholder) {
+  T_softmax_maxelem[(0)] = -3.402823e+38f;
+  for (int k = 0; k < 10; ++k) {
+    T_softmax_maxelem[(0)] = max(T_softmax_maxelem[(0)], (( float*)placeholder)[(k)]);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel1(float* __restrict__ T_softmax_exp, void* __restrict__ placeholder, float* __restrict__ T_softmax_maxelem) {
+  for (int i1 = 0; i1 < 10; ++i1) {
+    T_softmax_exp[(i1)] = __expf(((( float*)placeholder)[(i1)] - T_softmax_maxelem[(0)]));
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel3(void* __restrict__ T_softmax_norm, float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+  if (((int)threadIdx.x) < 10) {
+    (( float*)T_softmax_norm)[(((int)threadIdx.x))] = (T_softmax_exp[(((int)threadIdx.x))] / T_softmax_expsum[(0)]);
+  }
+}
+
+extern "C" __global__ void fused_reshape_kernel0(void* __restrict__ T_reshape, void* __restrict__ placeholder) {
+  for (int ax0_ax1_fused_outer = 0; ax0_ax1_fused_outer < 7; ++ax0_ax1_fused_outer) {
+    if ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 1577088) {
+      (( float*)T_reshape)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = (( float*)placeholder)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))];
+    }
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel0(float* __restrict__ T_softmax_maxelem, void* __restrict__ placeholder) {
+  T_softmax_maxelem[(0)] = -3.402823e+38f;
+  for (int k = 0; k < 10; ++k) {
+    T_softmax_maxelem[(0)] = max(T_softmax_maxelem[(0)], (( float*)placeholder)[(k)]);
+  }
+}
+
+extern "C" __global__ void fused_nn_dense_kernel0(void* __restrict__ placeholder, void* __restrict__ placeholder1, void* __restrict__ T_dense) {
+   float T_dense_rf[1];
+  __shared__ float red_buf0[64];
+  T_dense_rf[(0)] = 0.000000e+00f;
+  for (int k_outer = 0; k_outer < 24642; ++k_outer) {
+    T_dense_rf[(0)] = (T_dense_rf[(0)] + ((( float*)placeholder)[(((k_outer * 64) + ((int)threadIdx.x)))] * (( float*)placeholder1)[((((((int)blockIdx.x) * 1577088) + (k_outer * 64)) + ((int)threadIdx.x)))]));
+  }
+  __syncthreads();
+  ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = T_dense_rf[(0)];
+  __syncthreads();
+  if (((int)threadIdx.x) < 32) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 32))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) < 16) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 16))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 8))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 4))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 2))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 1))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) == 0) {
+    (( float*)T_dense)[(((int)blockIdx.x))] = ((volatile  float*)red_buf0)[(0)];
+  }
+}
+
+extern "C" __global__ void fused_nn_bias_add_kernel0(void* __restrict__ T_add, void* __restrict__ placeholder, void* __restrict__ placeholder1) {
+  if (((int)threadIdx.x) < 10) {
+    (( float*)T_add)[(((int)threadIdx.x))] = ((( float*)placeholder)[(((int)threadIdx.x))] + (( float*)placeholder1)[(((int)threadIdx.x))]);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel1(float* __restrict__ T_softmax_exp, void* __restrict__ placeholder, float* __restrict__ T_softmax_maxelem) {
+  for (int i1 = 0; i1 < 10; ++i1) {
+    T_softmax_exp[(i1)] = __expf(((( float*)placeholder)[(i1)] - T_softmax_maxelem[(0)]));
+  }
+}
+
+extern "C" __global__ void fused_multiply_kernel0(void* __restrict__ T_multiply, void* __restrict__ placeholder, void* __restrict__ placeholder1) {
+  for (int ax0_ax1_fused_outer = 0; ax0_ax1_fused_outer < 7; ++ax0_ax1_fused_outer) {
+    if ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 1577088) {
+      (( float*)T_multiply)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = ((( float*)placeholder)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] * (( float*)placeholder1)[(0)]);
+    }
+  }
+}
+
+
+Evaluate inference time cost...
+Mean inference time (std dev): 5.38 ms (0.36 ms)

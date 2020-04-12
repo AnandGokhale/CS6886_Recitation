@@ -1,0 +1,680 @@
+Extract tasks...
+fn (%data: Tensor[(1, 3, 224, 224), float32], %v15: Tensor[(32, 3, 3, 3), float32], %v14: Tensor[(32), float32], %v35: Tensor[(10, 1577088), float32], %v34: Tensor[(10), float32]) -> Tensor[(1, 10), float32] {
+  %0 = nn.conv2d(%data, %v15, padding=[0, 0, 0, 0], channels=32, kernel_size=[3, 3]) /* ty=Tensor[(1, 32, 222, 222), float32] */;
+  %1 = nn.bias_add(%0, %v14) /* ty=Tensor[(1, 32, 222, 222), float32] */;
+  %2 = nn.relu(%1) /* ty=Tensor[(1, 32, 222, 222), float32] */;
+  %3 = reshape(%2, newshape=[-1, 1577088]) /* ty=Tensor[(1, 1577088), float32] */;
+  %4 = multiply(%3, 1f /* ty=float32 */) /* ty=Tensor[(1, 1577088), float32] */;
+  %5 = transpose(%v35, axes=[1, 0]) /* ty=Tensor[(1577088, 10), float32] */;
+  %6 = multiply(%5, 1f /* ty=float32 */) /* ty=Tensor[(1577088, 10), float32] */;
+  %7 = transpose(%6, axes=[1, 0]) /* ty=Tensor[(10, 1577088), float32] */;
+  %8 = nn.dense(%4, %7, units=10) /* ty=Tensor[(1, 10), float32] */;
+  %9 = nn.bias_add(%8, %v34) /* ty=Tensor[(1, 10), float32] */;
+  %10 = nn.softmax(%9, axis=1) /* ty=Tensor[(1, 10), float32] */;
+  nn.softmax(%10) /* ty=Tensor[(1, 10), float32] */
+}
+Tuning...
+
+[Task  1/ 2]  Current/Best:    0.00/   0.00 GFLOPS | Progress: (0/2000) | 0.00 s
+[Task  1/ 2]  Current/Best:  177.50/ 404.50 GFLOPS | Progress: (8/2000) | 10.33 s
+[Task  1/ 2]  Current/Best:  196.66/ 404.50 GFLOPS | Progress: (16/2000) | 23.21 s
+[Task  1/ 2]  Current/Best:  405.09/ 405.09 GFLOPS | Progress: (24/2000) | 39.85 s
+[Task  1/ 2]  Current/Best:  229.70/ 408.82 GFLOPS | Progress: (32/2000) | 59.02 s
+[Task  1/ 2]  Current/Best:   57.76/ 408.82 GFLOPS | Progress: (40/2000) | 74.08 s
+[Task  1/ 2]  Current/Best:  400.36/ 408.82 GFLOPS | Progress: (48/2000) | 91.06 s
+[Task  1/ 2]  Current/Best:  352.70/ 408.82 GFLOPS | Progress: (56/2000) | 104.41 s
+[Task  1/ 2]  Current/Best:    8.11/ 408.82 GFLOPS | Progress: (64/2000) | 474.16 s
+[Task  1/ 2]  Current/Best:  412.47/ 414.82 GFLOPS | Progress: (72/2000) | 486.34 s
+[Task  1/ 2]  Current/Best:  413.86/ 414.94 GFLOPS | Progress: (80/2000) | 498.48 s
+[Task  1/ 2]  Current/Best:  413.36/ 414.94 GFLOPS | Progress: (88/2000) | 511.23 s
+[Task  1/ 2]  Current/Best:  385.29/ 414.94 GFLOPS | Progress: (96/2000) | 522.53 s
+[Task  1/ 2]  Current/Best:  410.68/ 414.94 GFLOPS | Progress: (104/2000) | 534.49 s
+[Task  1/ 2]  Current/Best:  329.56/ 414.94 GFLOPS | Progress: (112/2000) | 546.50 s
+[Task  1/ 2]  Current/Best:  329.42/ 414.94 GFLOPS | Progress: (120/2000) | 556.60 s
+[Task  1/ 2]  Current/Best:  347.01/ 414.94 GFLOPS | Progress: (128/2000) | 823.33 s
+[Task  1/ 2]  Current/Best:  382.74/ 414.94 GFLOPS | Progress: (136/2000) | 835.52 s
+[Task  1/ 2]  Current/Best:  405.60/ 414.94 GFLOPS | Progress: (144/2000) | 847.48 s
+[Task  1/ 2]  Current/Best:  408.48/ 414.94 GFLOPS | Progress: (152/2000) | 859.21 s
+[Task  1/ 2]  Current/Best:  370.99/ 414.94 GFLOPS | Progress: (160/2000) | 871.48 s
+[Task  1/ 2]  Current/Best:  391.51/ 414.94 GFLOPS | Progress: (168/2000) | 884.33 s
+[Task  1/ 2]  Current/Best:  392.23/ 414.94 GFLOPS | Progress: (176/2000) | 895.59 s
+[Task  1/ 2]  Current/Best:  410.65/ 414.94 GFLOPS | Progress: (184/2000) | 907.24 s
+[Task  1/ 2]  Current/Best:   81.87/ 414.94 GFLOPS | Progress: (192/2000) | 1151.60 s
+[Task  1/ 2]  Current/Best:  407.84/ 414.94 GFLOPS | Progress: (200/2000) | 1164.32 s
+[Task  1/ 2]  Current/Best:  408.53/ 414.94 GFLOPS | Progress: (208/2000) | 1175.58 s
+[Task  1/ 2]  Current/Best:  408.77/ 414.94 GFLOPS | Progress: (216/2000) | 1186.69 s
+[Task  1/ 2]  Current/Best:  407.92/ 414.94 GFLOPS | Progress: (224/2000) | 1199.48 s
+[Task  1/ 2]  Current/Best:  408.49/ 414.94 GFLOPS | Progress: (232/2000) | 1212.00 s
+[Task  1/ 2]  Current/Best:  409.54/ 414.94 GFLOPS | Progress: (240/2000) | 1224.76 s
+[Task  1/ 2]  Current/Best:  411.72/ 414.94 GFLOPS | Progress: (248/2000) | 1236.06 s
+[Task  1/ 2]  Current/Best:   35.19/ 414.94 GFLOPS | Progress: (256/2000) | 1434.62 s
+[Task  1/ 2]  Current/Best:  412.14/ 414.94 GFLOPS | Progress: (264/2000) | 1446.78 s
+[Task  1/ 2]  Current/Best:  397.54/ 414.94 GFLOPS | Progress: (272/2000) | 1460.28 s
+[Task  1/ 2]  Current/Best:  410.23/ 414.94 GFLOPS | Progress: (280/2000) | 1472.42 s
+[Task  1/ 2]  Current/Best:  406.59/ 414.94 GFLOPS | Progress: (288/2000) | 1484.61 s
+[Task  1/ 2]  Current/Best:  412.74/ 414.94 GFLOPS | Progress: (296/2000) | 1497.16 s
+[Task  1/ 2]  Current/Best:  412.88/ 414.94 GFLOPS | Progress: (304/2000) | 1509.84 s
+[Task  1/ 2]  Current/Best:  413.85/ 414.94 GFLOPS | Progress: (312/2000) | 1522.26 s
+[Task  1/ 2]  Current/Best:   30.99/ 414.94 GFLOPS | Progress: (320/2000) | 1711.00 s
+[Task  1/ 2]  Current/Best:  411.74/ 414.94 GFLOPS | Progress: (328/2000) | 1724.37 s
+[Task  1/ 2]  Current/Best:  409.67/ 414.94 GFLOPS | Progress: (336/2000) | 1735.76 s
+[Task  1/ 2]  Current/Best:  411.81/ 414.94 GFLOPS | Progress: (344/2000) | 1748.33 s
+[Task  1/ 2]  Current/Best:  409.09/ 414.94 GFLOPS | Progress: (352/2000) | 1761.27 s
+[Task  1/ 2]  Current/Best:  402.50/ 414.94 GFLOPS | Progress: (360/2000) | 1775.07 s
+[Task  1/ 2]  Current/Best:  411.31/ 414.94 GFLOPS | Progress: (368/2000) | 1789.09 s
+[Task  1/ 2]  Current/Best:  409.40/ 414.94 GFLOPS | Progress: (376/2000) | 1801.35 s
+[Task  1/ 2]  Current/Best:   59.64/ 414.94 GFLOPS | Progress: (384/2000) | 2058.36 s
+[Task  1/ 2]  Current/Best:  413.62/ 414.94 GFLOPS | Progress: (392/2000) | 2070.98 s
+[Task  1/ 2]  Current/Best:  412.89/ 414.94 GFLOPS | Progress: (400/2000) | 2083.56 s
+[Task  1/ 2]  Current/Best:  411.97/ 416.09 GFLOPS | Progress: (408/2000) | 2096.82 s
+[Task  1/ 2]  Current/Best:  415.52/ 416.09 GFLOPS | Progress: (416/2000) | 2109.20 s
+[Task  1/ 2]  Current/Best:  411.77/ 416.59 GFLOPS | Progress: (424/2000) | 2121.01 s
+[Task  1/ 2]  Current/Best:  412.14/ 416.59 GFLOPS | Progress: (432/2000) | 2133.22 s
+[Task  1/ 2]  Current/Best:  411.21/ 416.59 GFLOPS | Progress: (440/2000) | 2145.53 s
+[Task  1/ 2]  Current/Best:   13.61/ 416.59 GFLOPS | Progress: (448/2000) | 2348.40 s
+[Task  1/ 2]  Current/Best:  413.89/ 416.59 GFLOPS | Progress: (456/2000) | 2360.16 s
+[Task  1/ 2]  Current/Best:  417.71/ 418.70 GFLOPS | Progress: (464/2000) | 2373.65 s
+[Task  1/ 2]  Current/Best:  417.36/ 418.70 GFLOPS | Progress: (472/2000) | 2385.88 s
+[Task  1/ 2]  Current/Best:  358.34/ 418.70 GFLOPS | Progress: (480/2000) | 2397.80 s
+[Task  1/ 2]  Current/Best:  415.33/ 418.70 GFLOPS | Progress: (488/2000) | 2409.87 s
+[Task  1/ 2]  Current/Best:  417.20/ 418.70 GFLOPS | Progress: (496/2000) | 2422.22 s
+[Task  1/ 2]  Current/Best:  416.97/ 418.70 GFLOPS | Progress: (504/2000) | 2435.71 s
+[Task  1/ 2]  Current/Best:   89.95/ 418.70 GFLOPS | Progress: (512/2000) | 2668.46 s
+[Task  1/ 2]  Current/Best:  416.14/ 418.70 GFLOPS | Progress: (520/2000) | 2681.27 s
+[Task  1/ 2]  Current/Best:  412.78/ 418.70 GFLOPS | Progress: (528/2000) | 2694.30 s
+[Task  1/ 2]  Current/Best:  413.20/ 418.70 GFLOPS | Progress: (536/2000) | 2707.23 s
+[Task  1/ 2]  Current/Best:  412.18/ 418.70 GFLOPS | Progress: (544/2000) | 2720.53 s
+[Task  1/ 2]  Current/Best:  413.18/ 418.70 GFLOPS | Progress: (552/2000) | 2733.21 s
+[Task  1/ 2]  Current/Best:  413.82/ 418.70 GFLOPS | Progress: (560/2000) | 2746.32 s
+[Task  1/ 2]  Current/Best:  412.09/ 418.70 GFLOPS | Progress: (568/2000) | 2759.25 s
+[Task  1/ 2]  Current/Best:  137.59/ 418.70 GFLOPS | Progress: (576/2000) | 3066.89 s
+[Task  1/ 2]  Current/Best:  397.81/ 418.70 GFLOPS | Progress: (584/2000) | 3079.73 s
+[Task  1/ 2]  Current/Best:  410.35/ 418.70 GFLOPS | Progress: (592/2000) | 3092.06 s
+[Task  1/ 2]  Current/Best:  412.76/ 418.70 GFLOPS | Progress: (600/2000) | 3103.86 s
+[Task  1/ 2]  Current/Best:  397.50/ 418.70 GFLOPS | Progress: (608/2000) | 3117.15 s
+[Task  1/ 2]  Current/Best:  407.58/ 418.70 GFLOPS | Progress: (616/2000) | 3129.92 s
+[Task  1/ 2]  Current/Best:  404.14/ 418.70 GFLOPS | Progress: (624/2000) | 3140.85 s
+[Task  1/ 2]  Current/Best:  413.42/ 418.70 GFLOPS | Progress: (632/2000) | 3153.18 s
+[Task  1/ 2]  Current/Best:   29.15/ 418.70 GFLOPS | Progress: (640/2000) | 3312.56 s
+[Task  1/ 2]  Current/Best:  405.42/ 418.70 GFLOPS | Progress: (648/2000) | 3326.00 s
+[Task  1/ 2]  Current/Best:  418.66/ 418.70 GFLOPS | Progress: (656/2000) | 3338.48 s
+[Task  1/ 2]  Current/Best:  402.36/ 418.70 GFLOPS | Progress: (664/2000) | 3350.84 s
+[Task  1/ 2]  Current/Best:  412.03/ 418.70 GFLOPS | Progress: (672/2000) | 3363.82 s
+[Task  1/ 2]  Current/Best:  411.66/ 418.70 GFLOPS | Progress: (680/2000) | 3377.38 s
+[Task  1/ 2]  Current/Best:  400.17/ 418.70 GFLOPS | Progress: (688/2000) | 3393.17 s
+[Task  1/ 2]  Current/Best:  387.40/ 418.70 GFLOPS | Progress: (696/2000) | 3405.33 s
+[Task  1/ 2]  Current/Best:    8.68/ 418.70 GFLOPS | Progress: (704/2000) | 3677.01 s
+[Task  1/ 2]  Current/Best:  410.22/ 425.42 GFLOPS | Progress: (712/2000) | 3690.53 s
+[Task  1/ 2]  Current/Best:  407.35/ 425.42 GFLOPS | Progress: (720/2000) | 3702.72 s
+[Task  1/ 2]  Current/Best:  412.50/ 425.42 GFLOPS | Progress: (728/2000) | 3715.28 s
+[Task  1/ 2]  Current/Best:  411.81/ 425.42 GFLOPS | Progress: (736/2000) | 3727.49 s
+[Task  1/ 2]  Current/Best:  406.68/ 425.42 GFLOPS | Progress: (744/2000) | 3739.04 s
+[Task  1/ 2]  Current/Best:  418.20/ 425.42 GFLOPS | Progress: (752/2000) | 3750.69 s
+[Task  1/ 2]  Current/Best:  413.02/ 425.42 GFLOPS | Progress: (760/2000) | 3761.91 s
+[Task  1/ 2]  Current/Best:  201.79/ 425.42 GFLOPS | Progress: (768/2000) | 4076.66 s
+[Task  1/ 2]  Current/Best:  426.96/ 429.73 GFLOPS | Progress: (776/2000) | 4089.74 s
+[Task  1/ 2]  Current/Best:  413.46/ 429.73 GFLOPS | Progress: (784/2000) | 4102.32 s
+[Task  1/ 2]  Current/Best:  417.33/ 429.73 GFLOPS | Progress: (792/2000) | 4115.24 s
+[Task  1/ 2]  Current/Best:  414.95/ 429.73 GFLOPS | Progress: (800/2000) | 4128.81 s
+[Task  1/ 2]  Current/Best:  419.54/ 429.73 GFLOPS | Progress: (808/2000) | 4141.95 s
+[Task  1/ 2]  Current/Best:  413.31/ 429.73 GFLOPS | Progress: (816/2000) | 4155.08 s
+[Task  1/ 2]  Current/Best:  415.78/ 429.73 GFLOPS | Progress: (824/2000) | 4167.89 s
+[Task  1/ 2]  Current/Best:   31.17/ 429.73 GFLOPS | Progress: (832/2000) | 4399.35 s
+[Task  1/ 2]  Current/Best:  415.14/ 429.73 GFLOPS | Progress: (840/2000) | 4412.48 s
+[Task  1/ 2]  Current/Best:  419.01/ 429.73 GFLOPS | Progress: (848/2000) | 4425.36 s
+[Task  1/ 2]  Current/Best:  412.00/ 429.73 GFLOPS | Progress: (856/2000) | 4438.82 s
+[Task  1/ 2]  Current/Best:  423.75/ 429.73 GFLOPS | Progress: (864/2000) | 4451.58 s
+[Task  1/ 2]  Current/Best:  417.17/ 429.73 GFLOPS | Progress: (872/2000) | 4465.91 s
+[Task  1/ 2]  Current/Best:  414.18/ 429.73 GFLOPS | Progress: (880/2000) | 4479.50 s
+[Task  1/ 2]  Current/Best:  416.72/ 429.73 GFLOPS | Progress: (888/2000) | 4491.93 s
+[Task  1/ 2]  Current/Best:  371.52/ 429.73 GFLOPS | Progress: (896/2000) | 4618.69 s
+[Task  1/ 2]  Current/Best:  415.86/ 429.73 GFLOPS | Progress: (904/2000) | 4631.48 s
+[Task  1/ 2]  Current/Best:  416.41/ 435.49 GFLOPS | Progress: (912/2000) | 4645.03 s
+[Task  1/ 2]  Current/Best:  415.07/ 435.49 GFLOPS | Progress: (920/2000) | 4658.19 s
+[Task  1/ 2]  Current/Best:  406.97/ 435.49 GFLOPS | Progress: (928/2000) | 4670.56 s
+[Task  1/ 2]  Current/Best:  416.41/ 435.49 GFLOPS | Progress: (936/2000) | 4683.20 s
+[Task  1/ 2]  Current/Best:  413.92/ 435.49 GFLOPS | Progress: (944/2000) | 4695.99 s
+[Task  1/ 2]  Current/Best:  415.79/ 435.49 GFLOPS | Progress: (952/2000) | 4709.13 s
+[Task  1/ 2]  Current/Best:   32.06/ 435.49 GFLOPS | Progress: (960/2000) | 5004.22 s
+[Task  1/ 2]  Current/Best:  428.14/ 435.49 GFLOPS | Progress: (968/2000) | 5017.15 s
+[Task  1/ 2]  Current/Best:  433.41/ 435.49 GFLOPS | Progress: (976/2000) | 5030.25 s
+[Task  1/ 2]  Current/Best:  422.88/ 435.49 GFLOPS | Progress: (984/2000) | 5043.01 s
+[Task  1/ 2]  Current/Best:  415.39/ 435.49 GFLOPS | Progress: (992/2000) | 5056.34 s
+[Task  1/ 2]  Current/Best:  419.32/ 435.49 GFLOPS | Progress: (1000/2000) | 5069.43 s
+[Task  1/ 2]  Current/Best:  416.53/ 435.49 GFLOPS | Progress: (1008/2000) | 5083.50 s
+[Task  1/ 2]  Current/Best:  406.23/ 435.49 GFLOPS | Progress: (1016/2000) | 5096.39 s
+[Task  1/ 2]  Current/Best:   34.93/ 435.49 GFLOPS | Progress: (1024/2000) | 5207.40 s
+[Task  1/ 2]  Current/Best:  423.58/ 435.49 GFLOPS | Progress: (1032/2000) | 5220.88 s
+[Task  1/ 2]  Current/Best:  416.61/ 435.49 GFLOPS | Progress: (1040/2000) | 5234.10 s
+[Task  1/ 2]  Current/Best:  416.62/ 435.49 GFLOPS | Progress: (1048/2000) | 5246.82 s
+[Task  1/ 2]  Current/Best:  414.85/ 435.49 GFLOPS | Progress: (1056/2000) | 5261.12 s
+[Task  1/ 2]  Current/Best:  414.71/ 435.49 GFLOPS | Progress: (1064/2000) | 5273.80 s
+[Task  1/ 2]  Current/Best:  413.59/ 435.49 GFLOPS | Progress: (1072/2000) | 5286.08 s
+[Task  1/ 2]  Current/Best:  416.35/ 435.49 GFLOPS | Progress: (1080/2000) | 5299.26 s
+[Task  1/ 2]  Current/Best:   13.74/ 435.84 GFLOPS | Progress: (1088/2000) | 5390.58 s
+[Task  1/ 2]  Current/Best:  416.97/ 436.79 GFLOPS | Progress: (1096/2000) | 5401.97 s
+[Task  1/ 2]  Current/Best:   96.46/ 436.79 GFLOPS | Progress: (1104/2000) | 5416.55 s
+[Task  1/ 2]  Current/Best:  412.00/ 436.79 GFLOPS | Progress: (1112/2000) | 5433.20 s
+[Task  1/ 2]  Current/Best:  383.38/ 436.79 GFLOPS | Progress: (1120/2000) | 5448.48 s
+[Task  1/ 2]  Current/Best:  413.47/ 436.79 GFLOPS | Progress: (1128/2000) | 5461.50 s
+[Task  1/ 2]  Current/Best:  410.20/ 436.79 GFLOPS | Progress: (1136/2000) | 5474.97 s
+[Task  1/ 2]  Current/Best:  384.99/ 436.79 GFLOPS | Progress: (1144/2000) | 5488.47 s
+[Task  1/ 2]  Current/Best:   12.49/ 436.79 GFLOPS | Progress: (1152/2000) | 5564.05 s
+[Task  1/ 2]  Current/Best:  427.60/ 436.79 GFLOPS | Progress: (1160/2000) | 5577.43 s
+[Task  1/ 2]  Current/Best:  430.09/ 436.79 GFLOPS | Progress: (1168/2000) | 5590.50 s
+[Task  1/ 2]  Current/Best:  429.88/ 436.79 GFLOPS | Progress: (1176/2000) | 5602.23 s
+[Task  1/ 2]  Current/Best:  422.36/ 436.79 GFLOPS | Progress: (1184/2000) | 5613.72 s
+[Task  1/ 2]  Current/Best:  422.19/ 436.79 GFLOPS | Progress: (1192/2000) | 5626.98 s
+[Task  1/ 2]  Current/Best:  396.29/ 436.79 GFLOPS | Progress: (1200/2000) | 5639.76 s
+[Task  1/ 2]  Current/Best:  424.05/ 436.79 GFLOPS | Progress: (1208/2000) | 5653.65 s
+[Task  1/ 2]  Current/Best:   50.52/ 436.79 GFLOPS | Progress: (1216/2000) | 5752.56 s
+[Task  1/ 2]  Current/Best:  421.86/ 436.79 GFLOPS | Progress: (1224/2000) | 5764.52 s
+[Task  1/ 2]  Current/Best:  420.28/ 436.79 GFLOPS | Progress: (1232/2000) | 5774.19 s
+[Task  1/ 2]  Current/Best:  420.66/ 436.79 GFLOPS | Progress: (1240/2000) | 5786.42 s
+[Task  1/ 2]  Current/Best:  420.10/ 436.79 GFLOPS | Progress: (1248/2000) | 5797.14 s
+[Task  1/ 2]  Current/Best:  421.00/ 436.79 GFLOPS | Progress: (1256/2000) | 5810.80 s
+[Task  1/ 2]  Current/Best:  419.68/ 436.79 GFLOPS | Progress: (1264/2000) | 5821.84 s
+[Task  1/ 2]  Current/Best:  422.21/ 436.79 GFLOPS | Progress: (1272/2000) | 5834.84 s
+[Task  1/ 2]  Current/Best:  103.75/ 436.79 GFLOPS | Progress: (1280/2000) | 6073.32 s
+[Task  1/ 2]  Current/Best:  422.15/ 436.79 GFLOPS | Progress: (1288/2000) | 6085.19 s
+[Task  1/ 2]  Current/Best:  427.38/ 436.79 GFLOPS | Progress: (1296/2000) | 6098.03 s
+[Task  1/ 2]  Current/Best:  427.15/ 436.79 GFLOPS | Progress: (1304/2000) | 6109.93 s
+[Task  1/ 2]  Current/Best:  420.09/ 436.79 GFLOPS | Progress: (1312/2000) | 6122.47 s
+[Task  1/ 2]  Current/Best:  420.69/ 436.79 GFLOPS | Progress: (1320/2000) | 6134.81 s
+[Task  1/ 2]  Current/Best:  416.82/ 436.79 GFLOPS | Progress: (1328/2000) | 6146.62 s
+[Task  1/ 2]  Current/Best:  420.24/ 436.79 GFLOPS | Progress: (1336/2000) | 6158.53 s
+[Task  1/ 2]  Current/Best:   52.33/ 436.79 GFLOPS | Progress: (1344/2000) | 6315.96 s
+[Task  1/ 2]  Current/Best:  418.01/ 436.79 GFLOPS | Progress: (1352/2000) | 6327.07 s
+[Task  1/ 2]  Current/Best:  418.65/ 436.79 GFLOPS | Progress: (1360/2000) | 6340.29 s
+[Task  1/ 2]  Current/Best:  422.10/ 436.79 GFLOPS | Progress: (1368/2000) | 6352.55 s
+[Task  1/ 2]  Current/Best:  416.38/ 436.79 GFLOPS | Progress: (1376/2000) | 6365.74 s
+[Task  1/ 2]  Current/Best:  418.69/ 436.79 GFLOPS | Progress: (1384/2000) | 6378.06 s
+[Task  1/ 2]  Current/Best:  417.26/ 436.79 GFLOPS | Progress: (1392/2000) | 6389.77 s
+[Task  1/ 2]  Current/Best:  417.83/ 436.79 GFLOPS | Progress: (1400/2000) | 6402.37 s
+[Task  1/ 2]  Current/Best:   62.27/ 436.79 GFLOPS | Progress: (1408/2000) | 6647.55 s
+[Task  1/ 2]  Current/Best:  421.53/ 436.79 GFLOPS | Progress: (1416/2000) | 6660.34 s
+[Task  1/ 2]  Current/Best:  417.38/ 436.79 GFLOPS | Progress: (1424/2000) | 6674.09 s
+[Task  1/ 2]  Current/Best:  430.50/ 436.79 GFLOPS | Progress: (1432/2000) | 6688.04 s
+[Task  1/ 2]  Current/Best:  421.82/ 436.79 GFLOPS | Progress: (1440/2000) | 6699.42 s
+[Task  1/ 2]  Current/Best:  416.76/ 436.79 GFLOPS | Progress: (1448/2000) | 6713.12 s
+[Task  1/ 2]  Current/Best:  421.81/ 436.79 GFLOPS | Progress: (1456/2000) | 6725.33 s
+[Task  1/ 2]  Current/Best:  416.68/ 436.79 GFLOPS | Progress: (1464/2000) | 6738.83 s
+[Task  1/ 2]  Current/Best:    7.86/ 436.79 GFLOPS | Progress: (1472/2000) | 6960.56 s
+[Task  1/ 2]  Current/Best:  424.61/ 436.79 GFLOPS | Progress: (1480/2000) | 6973.07 s
+[Task  1/ 2]  Current/Best:  415.75/ 436.79 GFLOPS | Progress: (1488/2000) | 6986.44 s
+[Task  1/ 2]  Current/Best:  411.89/ 436.79 GFLOPS | Progress: (1496/2000) | 6999.16 s
+[Task  1/ 2]  Current/Best:  413.23/ 436.79 GFLOPS | Progress: (1504/2000) | 7011.94 s
+[Task  1/ 2]  Current/Best:  416.09/ 436.79 GFLOPS | Progress: (1512/2000) | 7024.77 s
+[Task  1/ 2]  Current/Best:  414.89/ 436.79 GFLOPS | Progress: (1520/2000) | 7036.39 s
+[Task  1/ 2]  Current/Best:  412.09/ 436.79 GFLOPS | Progress: (1528/2000) | 7049.36 s
+[Task  1/ 2]  Current/Best:   11.92/ 436.79 GFLOPS | Progress: (1536/2000) | 7348.00 s
+[Task  1/ 2]  Current/Best:  426.76/ 436.79 GFLOPS | Progress: (1544/2000) | 7361.90 s
+[Task  1/ 2]  Current/Best:  415.48/ 436.79 GFLOPS | Progress: (1552/2000) | 7374.92 s
+[Task  1/ 2]  Current/Best:  419.36/ 436.79 GFLOPS | Progress: (1560/2000) | 7387.41 s
+[Task  1/ 2]  Current/Best:  414.94/ 436.79 GFLOPS | Progress: (1568/2000) | 7400.31 s
+[Task  1/ 2]  Current/Best:  416.12/ 436.79 GFLOPS | Progress: (1576/2000) | 7412.76 s
+[Task  1/ 2]  Current/Best:  420.77/ 436.79 GFLOPS | Progress: (1584/2000) | 7426.31 s
+[Task  1/ 2]  Current/Best:  424.05/ 436.79 GFLOPS | Progress: (1592/2000) | 7438.78 s
+[Task  1/ 2]  Current/Best:  266.16/ 436.79 GFLOPS | Progress: (1600/2000) | 7545.85 s
+[Task  1/ 2]  Current/Best:  417.73/ 436.79 GFLOPS | Progress: (1608/2000) | 7558.27 s
+[Task  1/ 2]  Current/Best:  422.86/ 436.79 GFLOPS | Progress: (1616/2000) | 7572.64 s
+[Task  1/ 2]  Current/Best:  419.51/ 436.79 GFLOPS | Progress: (1624/2000) | 7585.77 s
+[Task  1/ 2]  Current/Best:  422.38/ 436.79 GFLOPS | Progress: (1632/2000) | 7597.59 s
+[Task  1/ 2]  Current/Best:  422.56/ 436.79 GFLOPS | Progress: (1640/2000) | 7610.28 s
+[Task  1/ 2]  Current/Best:  350.10/ 436.79 GFLOPS | Progress: (1648/2000) | 7620.99 s
+[Task  1/ 2]  Current/Best:  418.41/ 436.79 GFLOPS | Progress: (1656/2000) | 7634.74 s
+[Task  1/ 2]  Current/Best:  238.04/ 436.79 GFLOPS | Progress: (1664/2000) | 7905.29 s
+[Task  1/ 2]  Current/Best:  415.44/ 436.79 GFLOPS | Progress: (1672/2000) | 7919.09 s
+[Task  1/ 2]  Current/Best:  399.54/ 436.79 GFLOPS | Progress: (1680/2000) | 7932.42 s
+[Task  1/ 2]  Current/Best:  424.15/ 436.79 GFLOPS | Progress: (1688/2000) | 7944.36 s
+[Task  1/ 2]  Current/Best:  422.97/ 436.79 GFLOPS | Progress: (1696/2000) | 7957.46 s Done.
+
+[Task  2/ 2]  Current/Best:    0.00/   0.00 GFLOPS | Progress: (0/2000) | 0.00 s
+[Task  2/ 2]  Current/Best:  132.05/ 132.05 GFLOPS | Progress: (8/2000) | 7.53 s
+[Task  2/ 2]  Current/Best:   49.30/ 132.05 GFLOPS | Progress: (16/2000) | 15.07 s
+[Task  2/ 2]  Current/Best:  197.29/ 197.29 GFLOPS | Progress: (24/2000) | 30.44 s
+[Task  2/ 2]  Current/Best:   69.57/ 303.98 GFLOPS | Progress: (32/2000) | 41.88 s
+[Task  2/ 2]  Current/Best:  567.61/ 843.03 GFLOPS | Progress: (40/2000) | 50.12 s
+[Task  2/ 2]  Current/Best:   51.67/ 988.82 GFLOPS | Progress: (48/2000) | 61.33 s
+[Task  2/ 2]  Current/Best:  447.21/ 988.82 GFLOPS | Progress: (56/2000) | 68.96 s
+[Task  2/ 2]  Current/Best:   28.00/ 988.82 GFLOPS | Progress: (64/2000) | 308.72 s
+[Task  2/ 2]  Current/Best:  633.42/ 988.82 GFLOPS | Progress: (72/2000) | 317.66 s
+[Task  2/ 2]  Current/Best:  526.55/ 988.82 GFLOPS | Progress: (80/2000) | 326.53 s
+[Task  2/ 2]  Current/Best:  399.38/ 988.82 GFLOPS | Progress: (88/2000) | 335.34 s
+[Task  2/ 2]  Current/Best:  697.63/ 988.82 GFLOPS | Progress: (96/2000) | 344.17 s
+[Task  2/ 2]  Current/Best:  536.04/ 988.82 GFLOPS | Progress: (104/2000) | 353.41 s
+[Task  2/ 2]  Current/Best:  782.71/ 988.82 GFLOPS | Progress: (112/2000) | 362.50 s
+[Task  2/ 2]  Current/Best:  283.27/ 988.82 GFLOPS | Progress: (120/2000) | 371.13 s
+[Task  2/ 2]  Current/Best:  871.32/ 988.82 GFLOPS | Progress: (128/2000) | 563.12 s
+[Task  2/ 2]  Current/Best:  758.54/1149.79 GFLOPS | Progress: (136/2000) | 572.12 s
+[Task  2/ 2]  Current/Best: 1208.94/1208.94 GFLOPS | Progress: (144/2000) | 581.45 s
+[Task  2/ 2]  Current/Best: 1072.35/1208.94 GFLOPS | Progress: (152/2000) | 590.96 s
+[Task  2/ 2]  Current/Best:  905.03/1293.94 GFLOPS | Progress: (160/2000) | 600.87 s
+[Task  2/ 2]  Current/Best: 1166.86/1293.94 GFLOPS | Progress: (168/2000) | 609.17 s
+[Task  2/ 2]  Current/Best:  956.00/1293.94 GFLOPS | Progress: (176/2000) | 617.65 s
+[Task  2/ 2]  Current/Best:  814.58/1293.94 GFLOPS | Progress: (184/2000) | 626.38 s
+[Task  2/ 2]  Current/Best: 1086.91/1293.94 GFLOPS | Progress: (192/2000) | 791.72 s
+[Task  2/ 2]  Current/Best: 1044.17/1406.36 GFLOPS | Progress: (200/2000) | 800.97 s
+[Task  2/ 2]  Current/Best: 1212.85/1659.36 GFLOPS | Progress: (208/2000) | 809.90 s
+[Task  2/ 2]  Current/Best: 1302.99/1659.36 GFLOPS | Progress: (216/2000) | 818.76 s
+[Task  2/ 2]  Current/Best: 1048.87/1659.36 GFLOPS | Progress: (224/2000) | 828.07 s
+[Task  2/ 2]  Current/Best: 1044.58/1659.36 GFLOPS | Progress: (232/2000) | 836.69 s
+[Task  2/ 2]  Current/Best: 1477.42/1659.36 GFLOPS | Progress: (240/2000) | 846.27 s
+[Task  2/ 2]  Current/Best: 1022.44/1659.36 GFLOPS | Progress: (248/2000) | 854.92 s
+[Task  2/ 2]  Current/Best:  155.21/1659.36 GFLOPS | Progress: (256/2000) | 951.91 s
+[Task  2/ 2]  Current/Best: 1395.91/1659.36 GFLOPS | Progress: (264/2000) | 961.33 s
+[Task  2/ 2]  Current/Best: 1525.46/1659.36 GFLOPS | Progress: (272/2000) | 970.09 s
+[Task  2/ 2]  Current/Best: 1443.64/1698.28 GFLOPS | Progress: (280/2000) | 978.46 s
+[Task  2/ 2]  Current/Best: 1178.25/1698.28 GFLOPS | Progress: (288/2000) | 986.56 s
+[Task  2/ 2]  Current/Best: 1551.99/1698.28 GFLOPS | Progress: (296/2000) | 993.74 s
+[Task  2/ 2]  Current/Best: 1195.86/1698.28 GFLOPS | Progress: (304/2000) | 1003.20 s
+[Task  2/ 2]  Current/Best:  933.27/1698.28 GFLOPS | Progress: (312/2000) | 1012.30 s
+[Task  2/ 2]  Current/Best:  286.44/1698.28 GFLOPS | Progress: (320/2000) | 1134.59 s
+[Task  2/ 2]  Current/Best: 1645.77/1698.28 GFLOPS | Progress: (328/2000) | 1143.38 s
+[Task  2/ 2]  Current/Best: 1650.04/1698.28 GFLOPS | Progress: (336/2000) | 1152.64 s
+[Task  2/ 2]  Current/Best: 1585.33/1698.28 GFLOPS | Progress: (344/2000) | 1161.00 s
+[Task  2/ 2]  Current/Best: 1299.48/1783.00 GFLOPS | Progress: (352/2000) | 1170.86 s
+[Task  2/ 2]  Current/Best: 1115.04/1783.00 GFLOPS | Progress: (360/2000) | 1179.47 s
+[Task  2/ 2]  Current/Best: 1809.96/1809.96 GFLOPS | Progress: (368/2000) | 1188.91 s
+[Task  2/ 2]  Current/Best: 1763.65/1809.96 GFLOPS | Progress: (376/2000) | 1198.05 s
+[Task  2/ 2]  Current/Best:  409.26/1809.96 GFLOPS | Progress: (384/2000) | 1326.58 s
+[Task  2/ 2]  Current/Best: 1830.98/1880.99 GFLOPS | Progress: (392/2000) | 1336.64 s
+[Task  2/ 2]  Current/Best: 1996.29/1996.77 GFLOPS | Progress: (400/2000) | 1346.78 s
+[Task  2/ 2]  Current/Best: 1737.57/1996.77 GFLOPS | Progress: (408/2000) | 1358.26 s
+[Task  2/ 2]  Current/Best: 1565.00/1996.77 GFLOPS | Progress: (416/2000) | 1367.59 s
+[Task  2/ 2]  Current/Best: 1858.15/1996.77 GFLOPS | Progress: (424/2000) | 1377.43 s
+[Task  2/ 2]  Current/Best: 1786.65/1996.77 GFLOPS | Progress: (432/2000) | 1386.68 s
+[Task  2/ 2]  Current/Best: 1528.54/1996.77 GFLOPS | Progress: (440/2000) | 1396.07 s
+[Task  2/ 2]  Current/Best: 1779.19/1996.77 GFLOPS | Progress: (448/2000) | 1457.33 s
+[Task  2/ 2]  Current/Best: 1702.70/2005.02 GFLOPS | Progress: (456/2000) | 1468.26 s
+[Task  2/ 2]  Current/Best: 1032.72/2005.02 GFLOPS | Progress: (464/2000) | 1477.25 s
+[Task  2/ 2]  Current/Best: 1279.62/2005.02 GFLOPS | Progress: (472/2000) | 1487.69 s
+[Task  2/ 2]  Current/Best: 1642.79/2005.02 GFLOPS | Progress: (480/2000) | 1497.89 s
+[Task  2/ 2]  Current/Best: 1792.69/2005.02 GFLOPS | Progress: (488/2000) | 1509.26 s
+[Task  2/ 2]  Current/Best: 1732.80/2005.02 GFLOPS | Progress: (496/2000) | 1518.49 s
+[Task  2/ 2]  Current/Best: 1726.47/2005.02 GFLOPS | Progress: (504/2000) | 1529.16 s
+[Task  2/ 2]  Current/Best:    5.69/2005.02 GFLOPS | Progress: (512/2000) | 1755.78 s
+[Task  2/ 2]  Current/Best: 1866.07/2017.44 GFLOPS | Progress: (520/2000) | 1766.81 s
+[Task  2/ 2]  Current/Best: 2003.66/2023.12 GFLOPS | Progress: (528/2000) | 1778.26 s
+[Task  2/ 2]  Current/Best: 1873.93/2023.12 GFLOPS | Progress: (536/2000) | 1788.48 s
+[Task  2/ 2]  Current/Best: 1852.15/2023.12 GFLOPS | Progress: (544/2000) | 1798.25 s
+[Task  2/ 2]  Current/Best: 1856.35/2023.12 GFLOPS | Progress: (552/2000) | 1808.93 s
+[Task  2/ 2]  Current/Best: 1723.06/2023.12 GFLOPS | Progress: (560/2000) | 1819.90 s
+[Task  2/ 2]  Current/Best: 1457.41/2023.12 GFLOPS | Progress: (568/2000) | 1830.00 s
+[Task  2/ 2]  Current/Best:   10.86/2023.12 GFLOPS | Progress: (576/2000) | 2014.16 s
+[Task  2/ 2]  Current/Best: 1744.12/2115.75 GFLOPS | Progress: (584/2000) | 2026.44 s
+[Task  2/ 2]  Current/Best: 1735.21/2115.75 GFLOPS | Progress: (592/2000) | 2036.94 s
+[Task  2/ 2]  Current/Best: 1573.24/2115.75 GFLOPS | Progress: (600/2000) | 2048.00 s
+[Task  2/ 2]  Current/Best: 1723.10/2115.75 GFLOPS | Progress: (608/2000) | 2059.06 s
+[Task  2/ 2]  Current/Best: 1914.36/2115.75 GFLOPS | Progress: (616/2000) | 2070.04 s
+[Task  2/ 2]  Current/Best: 1511.89/2115.75 GFLOPS | Progress: (624/2000) | 2080.08 s
+[Task  2/ 2]  Current/Best: 1714.85/2115.75 GFLOPS | Progress: (632/2000) | 2091.67 s
+[Task  2/ 2]  Current/Best:   62.46/2115.75 GFLOPS | Progress: (640/2000) | 2221.54 s
+[Task  2/ 2]  Current/Best: 2024.52/2115.75 GFLOPS | Progress: (648/2000) | 2233.46 s
+[Task  2/ 2]  Current/Best: 1810.17/2115.75 GFLOPS | Progress: (656/2000) | 2244.60 s
+[Task  2/ 2]  Current/Best: 1886.10/2115.75 GFLOPS | Progress: (664/2000) | 2254.92 s
+[Task  2/ 2]  Current/Best: 1407.98/2115.75 GFLOPS | Progress: (672/2000) | 2265.88 s
+[Task  2/ 2]  Current/Best: 1829.02/2115.75 GFLOPS | Progress: (680/2000) | 2276.44 s
+[Task  2/ 2]  Current/Best: 1396.98/2115.75 GFLOPS | Progress: (688/2000) | 2287.35 s
+[Task  2/ 2]  Current/Best: 1357.07/2115.75 GFLOPS | Progress: (696/2000) | 2296.80 s
+[Task  2/ 2]  Current/Best:   27.94/2115.75 GFLOPS | Progress: (704/2000) | 2499.58 s
+[Task  2/ 2]  Current/Best: 1886.43/2115.75 GFLOPS | Progress: (712/2000) | 2511.62 s
+[Task  2/ 2]  Current/Best: 1768.51/2115.75 GFLOPS | Progress: (720/2000) | 2521.78 s
+[Task  2/ 2]  Current/Best: 1864.63/2115.75 GFLOPS | Progress: (728/2000) | 2531.98 s
+[Task  2/ 2]  Current/Best: 1909.68/2115.75 GFLOPS | Progress: (736/2000) | 2541.72 s
+[Task  2/ 2]  Current/Best: 1810.25/2115.75 GFLOPS | Progress: (744/2000) | 2551.09 s
+[Task  2/ 2]  Current/Best: 1517.65/2115.75 GFLOPS | Progress: (752/2000) | 2560.24 s
+[Task  2/ 2]  Current/Best: 1824.10/2115.75 GFLOPS | Progress: (760/2000) | 2570.15 s
+[Task  2/ 2]  Current/Best:    6.54/2115.75 GFLOPS | Progress: (768/2000) | 2744.46 s
+[Task  2/ 2]  Current/Best: 1738.39/2115.75 GFLOPS | Progress: (776/2000) | 2755.39 s
+[Task  2/ 2]  Current/Best: 1725.24/2115.75 GFLOPS | Progress: (784/2000) | 2765.46 s
+[Task  2/ 2]  Current/Best: 1869.22/2115.75 GFLOPS | Progress: (792/2000) | 2775.94 s
+[Task  2/ 2]  Current/Best: 1831.86/2115.75 GFLOPS | Progress: (800/2000) | 2786.46 s
+[Task  2/ 2]  Current/Best: 1736.01/2115.75 GFLOPS | Progress: (808/2000) | 2796.79 s
+[Task  2/ 2]  Current/Best: 1345.74/2115.75 GFLOPS | Progress: (816/2000) | 2808.14 s
+[Task  2/ 2]  Current/Best: 1555.90/2115.75 GFLOPS | Progress: (824/2000) | 2817.59 s
+[Task  2/ 2]  Current/Best:  255.93/2115.75 GFLOPS | Progress: (832/2000) | 3016.19 s
+[Task  2/ 2]  Current/Best: 1690.20/2115.75 GFLOPS | Progress: (840/2000) | 3026.80 s
+[Task  2/ 2]  Current/Best: 1911.54/2115.75 GFLOPS | Progress: (848/2000) | 3037.84 s
+[Task  2/ 2]  Current/Best: 1548.59/2115.75 GFLOPS | Progress: (856/2000) | 3048.76 s
+[Task  2/ 2]  Current/Best: 1655.28/2115.75 GFLOPS | Progress: (864/2000) | 3059.91 s
+[Task  2/ 2]  Current/Best: 1498.08/2115.75 GFLOPS | Progress: (872/2000) | 3069.09 s
+[Task  2/ 2]  Current/Best: 1574.60/2115.75 GFLOPS | Progress: (880/2000) | 3080.73 s
+[Task  2/ 2]  Current/Best: 1740.32/2115.75 GFLOPS | Progress: (888/2000) | 3091.16 s
+[Task  2/ 2]  Current/Best:   12.68/2115.75 GFLOPS | Progress: (896/2000) | 3267.73 s
+[Task  2/ 2]  Current/Best: 1766.84/2115.75 GFLOPS | Progress: (904/2000) | 3278.03 s
+[Task  2/ 2]  Current/Best: 1650.07/2115.75 GFLOPS | Progress: (912/2000) | 3289.50 s
+[Task  2/ 2]  Current/Best: 1906.42/2115.75 GFLOPS | Progress: (920/2000) | 3299.41 s
+[Task  2/ 2]  Current/Best: 1738.50/2115.75 GFLOPS | Progress: (928/2000) | 3309.48 s
+[Task  2/ 2]  Current/Best: 1829.60/2115.75 GFLOPS | Progress: (936/2000) | 3320.05 s
+[Task  2/ 2]  Current/Best: 1656.13/2115.75 GFLOPS | Progress: (944/2000) | 3330.97 s
+[Task  2/ 2]  Current/Best: 1102.57/2115.75 GFLOPS | Progress: (952/2000) | 3341.99 s
+[Task  2/ 2]  Current/Best: 1781.66/2115.75 GFLOPS | Progress: (960/2000) | 3533.27 s
+[Task  2/ 2]  Current/Best: 1878.27/2115.75 GFLOPS | Progress: (968/2000) | 3543.03 s
+[Task  2/ 2]  Current/Best: 1640.26/2115.75 GFLOPS | Progress: (976/2000) | 3552.06 s
+[Task  2/ 2]  Current/Best: 1448.08/2115.75 GFLOPS | Progress: (984/2000) | 3561.52 s
+[Task  2/ 2]  Current/Best: 1485.12/2115.75 GFLOPS | Progress: (992/2000) | 3571.87 s
+[Task  2/ 2]  Current/Best: 1229.98/2115.75 GFLOPS | Progress: (1000/2000) | 3581.80 s
+[Task  2/ 2]  Current/Best: 1479.33/2115.75 GFLOPS | Progress: (1008/2000) | 3591.19 s
+[Task  2/ 2]  Current/Best: 1805.54/2115.75 GFLOPS | Progress: (1016/2000) | 3600.70 s
+[Task  2/ 2]  Current/Best:   34.86/2115.75 GFLOPS | Progress: (1024/2000) | 3777.69 s
+[Task  2/ 2]  Current/Best: 1323.26/2115.75 GFLOPS | Progress: (1032/2000) | 3789.52 s
+[Task  2/ 2]  Current/Best: 1402.32/2115.75 GFLOPS | Progress: (1040/2000) | 3799.54 s
+[Task  2/ 2]  Current/Best: 1306.35/2115.75 GFLOPS | Progress: (1048/2000) | 3808.96 s
+[Task  2/ 2]  Current/Best: 1646.52/2115.75 GFLOPS | Progress: (1056/2000) | 3818.70 s
+[Task  2/ 2]  Current/Best: 1783.98/2115.75 GFLOPS | Progress: (1064/2000) | 3827.60 s
+[Task  2/ 2]  Current/Best: 1763.68/2115.75 GFLOPS | Progress: (1072/2000) | 3837.63 s
+[Task  2/ 2]  Current/Best: 1406.17/2115.75 GFLOPS | Progress: (1080/2000) | 3846.90 s
+[Task  2/ 2]  Current/Best:   26.22/2115.75 GFLOPS | Progress: (1088/2000) | 4035.80 s
+[Task  2/ 2]  Current/Best: 1947.18/2115.75 GFLOPS | Progress: (1096/2000) | 4045.95 s
+[Task  2/ 2]  Current/Best: 1825.60/2115.75 GFLOPS | Progress: (1104/2000) | 4055.76 s
+[Task  2/ 2]  Current/Best: 1771.03/2115.75 GFLOPS | Progress: (1112/2000) | 4066.31 s
+[Task  2/ 2]  Current/Best: 1777.16/2115.75 GFLOPS | Progress: (1120/2000) | 4077.08 s
+[Task  2/ 2]  Current/Best: 1742.37/2115.75 GFLOPS | Progress: (1128/2000) | 4086.20 s
+[Task  2/ 2]  Current/Best: 1760.30/2115.75 GFLOPS | Progress: (1136/2000) | 4097.35 s
+[Task  2/ 2]  Current/Best: 1665.27/2115.75 GFLOPS | Progress: (1144/2000) | 4108.06 s
+[Task  2/ 2]  Current/Best: 1736.86/2115.75 GFLOPS | Progress: (1152/2000) | 4274.00 s
+[Task  2/ 2]  Current/Best: 1678.96/2170.09 GFLOPS | Progress: (1160/2000) | 4285.08 s
+[Task  2/ 2]  Current/Best: 1653.08/2170.09 GFLOPS | Progress: (1168/2000) | 4294.13 s
+[Task  2/ 2]  Current/Best: 1541.48/2170.09 GFLOPS | Progress: (1176/2000) | 4305.11 s
+[Task  2/ 2]  Current/Best: 1543.83/2170.09 GFLOPS | Progress: (1184/2000) | 4315.85 s
+[Task  2/ 2]  Current/Best: 1974.93/2170.09 GFLOPS | Progress: (1192/2000) | 4325.81 s
+[Task  2/ 2]  Current/Best: 1648.35/2170.09 GFLOPS | Progress: (1200/2000) | 4336.74 s
+[Task  2/ 2]  Current/Best: 1459.66/2170.09 GFLOPS | Progress: (1208/2000) | 4345.03 s
+[Task  2/ 2]  Current/Best:    2.73/2170.09 GFLOPS | Progress: (1216/2000) | 4473.22 s
+[Task  2/ 2]  Current/Best: 1869.39/2170.09 GFLOPS | Progress: (1224/2000) | 4482.82 s
+[Task  2/ 2]  Current/Best: 2002.37/2170.09 GFLOPS | Progress: (1232/2000) | 4491.61 s
+[Task  2/ 2]  Current/Best: 1778.44/2170.09 GFLOPS | Progress: (1240/2000) | 4501.27 s
+[Task  2/ 2]  Current/Best: 1829.73/2170.09 GFLOPS | Progress: (1248/2000) | 4510.53 s
+[Task  2/ 2]  Current/Best: 1718.06/2170.09 GFLOPS | Progress: (1256/2000) | 4520.00 s
+[Task  2/ 2]  Current/Best: 1486.54/2170.09 GFLOPS | Progress: (1264/2000) | 4529.33 s
+[Task  2/ 2]  Current/Best: 1575.28/2170.09 GFLOPS | Progress: (1272/2000) | 4538.67 s
+[Task  2/ 2]  Current/Best: 1711.54/2170.09 GFLOPS | Progress: (1280/2000) | 4750.64 s
+[Task  2/ 2]  Current/Best: 1668.70/2170.09 GFLOPS | Progress: (1288/2000) | 4759.46 s
+[Task  2/ 2]  Current/Best: 1670.07/2170.09 GFLOPS | Progress: (1296/2000) | 4768.52 s
+[Task  2/ 2]  Current/Best: 1622.18/2170.09 GFLOPS | Progress: (1304/2000) | 4777.91 s
+[Task  2/ 2]  Current/Best: 1724.55/2170.09 GFLOPS | Progress: (1312/2000) | 4786.95 s
+[Task  2/ 2]  Current/Best: 1736.35/2170.09 GFLOPS | Progress: (1320/2000) | 4796.74 s
+[Task  2/ 2]  Current/Best: 1726.58/2170.09 GFLOPS | Progress: (1328/2000) | 4806.99 s
+[Task  2/ 2]  Current/Best: 1543.20/2170.09 GFLOPS | Progress: (1336/2000) | 4816.04 s
+[Task  2/ 2]  Current/Best:    6.82/2170.09 GFLOPS | Progress: (1344/2000) | 5008.76 s
+[Task  2/ 2]  Current/Best: 1863.46/2170.09 GFLOPS | Progress: (1352/2000) | 5018.93 s
+[Task  2/ 2]  Current/Best: 1857.07/2170.09 GFLOPS | Progress: (1360/2000) | 5028.40 s
+[Task  2/ 2]  Current/Best: 1645.83/2170.09 GFLOPS | Progress: (1368/2000) | 5038.91 s
+[Task  2/ 2]  Current/Best: 2083.73/2170.09 GFLOPS | Progress: (1376/2000) | 5049.14 s
+[Task  2/ 2]  Current/Best: 1626.55/2170.09 GFLOPS | Progress: (1384/2000) | 5058.15 s
+[Task  2/ 2]  Current/Best: 2029.69/2170.09 GFLOPS | Progress: (1392/2000) | 5069.06 s
+[Task  2/ 2]  Current/Best: 1892.17/2170.09 GFLOPS | Progress: (1400/2000) | 5078.58 s
+[Task  2/ 2]  Current/Best:  279.40/2170.09 GFLOPS | Progress: (1408/2000) | 5264.17 s
+[Task  2/ 2]  Current/Best: 1904.75/2170.09 GFLOPS | Progress: (1416/2000) | 5272.64 s
+[Task  2/ 2]  Current/Best: 1920.20/2170.09 GFLOPS | Progress: (1424/2000) | 5282.72 s
+[Task  2/ 2]  Current/Best: 1537.99/2170.09 GFLOPS | Progress: (1432/2000) | 5291.41 s
+[Task  2/ 2]  Current/Best: 1927.64/2170.09 GFLOPS | Progress: (1440/2000) | 5300.51 s
+[Task  2/ 2]  Current/Best: 1988.01/2170.09 GFLOPS | Progress: (1448/2000) | 5309.20 s
+[Task  2/ 2]  Current/Best: 1827.20/2170.09 GFLOPS | Progress: (1456/2000) | 5318.57 s
+[Task  2/ 2]  Current/Best: 1868.12/2170.09 GFLOPS | Progress: (1464/2000) | 5326.72 s
+[Task  2/ 2]  Current/Best:  262.55/2170.09 GFLOPS | Progress: (1472/2000) | 5524.36 s
+[Task  2/ 2]  Current/Best: 1927.14/2170.09 GFLOPS | Progress: (1480/2000) | 5534.72 s
+[Task  2/ 2]  Current/Best: 1560.73/2170.09 GFLOPS | Progress: (1488/2000) | 5544.52 s
+[Task  2/ 2]  Current/Best: 1662.18/2170.09 GFLOPS | Progress: (1496/2000) | 5553.40 s
+[Task  2/ 2]  Current/Best: 1887.51/2170.09 GFLOPS | Progress: (1504/2000) | 5561.67 s
+[Task  2/ 2]  Current/Best: 1966.50/2170.09 GFLOPS | Progress: (1512/2000) | 5571.70 s
+[Task  2/ 2]  Current/Best: 1499.74/2170.09 GFLOPS | Progress: (1520/2000) | 5582.67 s
+[Task  2/ 2]  Current/Best: 1754.94/2170.09 GFLOPS | Progress: (1528/2000) | 5591.66 s
+[Task  2/ 2]  Current/Best:    8.34/2170.09 GFLOPS | Progress: (1536/2000) | 5736.83 s
+[Task  2/ 2]  Current/Best: 1867.67/2170.09 GFLOPS | Progress: (1544/2000) | 5746.32 s
+[Task  2/ 2]  Current/Best: 1915.36/2170.09 GFLOPS | Progress: (1552/2000) | 5755.36 s
+[Task  2/ 2]  Current/Best: 1491.16/2170.09 GFLOPS | Progress: (1560/2000) | 5764.66 s
+[Task  2/ 2]  Current/Best: 1798.04/2170.09 GFLOPS | Progress: (1568/2000) | 5774.85 s
+[Task  2/ 2]  Current/Best: 1328.86/2170.09 GFLOPS | Progress: (1576/2000) | 5784.58 s
+[Task  2/ 2]  Current/Best: 1320.71/2170.09 GFLOPS | Progress: (1584/2000) | 5794.63 s
+[Task  2/ 2]  Current/Best: 1690.33/2170.09 GFLOPS | Progress: (1592/2000) | 5804.00 s
+[Task  2/ 2]  Current/Best:    1.99/2170.09 GFLOPS | Progress: (1600/2000) | 5943.79 s
+[Task  2/ 2]  Current/Best: 1697.72/2170.09 GFLOPS | Progress: (1608/2000) | 5953.33 s
+[Task  2/ 2]  Current/Best: 1649.83/2170.09 GFLOPS | Progress: (1616/2000) | 5961.88 s
+[Task  2/ 2]  Current/Best: 1618.73/2170.09 GFLOPS | Progress: (1624/2000) | 5970.80 s
+[Task  2/ 2]  Current/Best: 1706.30/2170.09 GFLOPS | Progress: (1632/2000) | 5980.31 s
+[Task  2/ 2]  Current/Best: 1522.03/2170.09 GFLOPS | Progress: (1640/2000) | 5990.47 s
+[Task  2/ 2]  Current/Best: 1869.46/2170.09 GFLOPS | Progress: (1648/2000) | 5998.91 s
+[Task  2/ 2]  Current/Best: 1847.32/2170.09 GFLOPS | Progress: (1656/2000) | 6007.61 s
+[Task  2/ 2]  Current/Best:   87.62/2170.09 GFLOPS | Progress: (1664/2000) | 6099.84 s
+[Task  2/ 2]  Current/Best: 1579.01/2170.09 GFLOPS | Progress: (1672/2000) | 6108.80 s
+[Task  2/ 2]  Current/Best: 1685.03/2170.09 GFLOPS | Progress: (1680/2000) | 6118.33 s
+[Task  2/ 2]  Current/Best: 1213.41/2170.09 GFLOPS | Progress: (1688/2000) | 6127.65 s
+[Task  2/ 2]  Current/Best: 1847.39/2170.09 GFLOPS | Progress: (1696/2000) | 6137.30 s
+[Task  2/ 2]  Current/Best: 1984.19/2170.09 GFLOPS | Progress: (1704/2000) | 6146.96 s
+[Task  2/ 2]  Current/Best: 1826.81/2170.09 GFLOPS | Progress: (1712/2000) | 6155.58 s
+[Task  2/ 2]  Current/Best: 1655.18/2170.09 GFLOPS | Progress: (1720/2000) | 6164.59 s
+[Task  2/ 2]  Current/Best:  323.86/2170.09 GFLOPS | Progress: (1728/2000) | 6302.42 s
+[Task  2/ 2]  Current/Best: 1901.17/2170.09 GFLOPS | Progress: (1736/2000) | 6311.64 s
+[Task  2/ 2]  Current/Best: 1539.50/2170.09 GFLOPS | Progress: (1744/2000) | 6321.15 s
+[Task  2/ 2]  Current/Best: 1888.75/2170.09 GFLOPS | Progress: (1752/2000) | 6331.44 s
+[Task  2/ 2]  Current/Best: 1676.38/2170.09 GFLOPS | Progress: (1760/2000) | 6340.13 s Done.
+Compile...
+extern "C" __global__ void fused_nn_dense_add_kernel0(void* __restrict__ placeholder, void* __restrict__ placeholder1, void* __restrict__ T_add, void* __restrict__ placeholder2) {
+   float T_dense_rf[1];
+  __shared__ float red_buf0[64];
+  __shared__ float T_dense[1];
+  T_dense_rf[(0)] = 0.000000e+00f;
+  for (int k_outer = 0; k_outer < 24642; ++k_outer) {
+    T_dense_rf[(0)] = (T_dense_rf[(0)] + ((( float*)placeholder)[(((k_outer * 64) + ((int)threadIdx.x)))] * (( float*)placeholder1)[((((((int)blockIdx.x) * 1577088) + (k_outer * 64)) + ((int)threadIdx.x)))]));
+  }
+  __syncthreads();
+  ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = T_dense_rf[(0)];
+  __syncthreads();
+  if (((int)threadIdx.x) < 32) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 32))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) < 16) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 16))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 8))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 4))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 2))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 1))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) == 0) {
+    T_dense[(0)] = ((volatile  float*)red_buf0)[(0)];
+  }
+  if (((int)threadIdx.x) == 0) {
+    (( float*)T_add)[(((int)blockIdx.x))] = (T_dense[(0)] + (( float*)placeholder2)[(((int)blockIdx.x))]);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel2(float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+   float T_softmax_expsum_rf[1];
+  __shared__ float red_buf0[64];
+  T_softmax_expsum_rf[(0)] = 0.000000e+00f;
+  if (((int)threadIdx.x) < 10) {
+    T_softmax_expsum_rf[(0)] = (T_softmax_expsum_rf[(0)] + T_softmax_exp[(((int)threadIdx.x))]);
+  }
+  __syncthreads();
+  ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = T_softmax_expsum_rf[(0)];
+  __syncthreads();
+  if (((int)threadIdx.x) < 32) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 32))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) < 16) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 16))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 8))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 4))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 2))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 1))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) == 0) {
+    T_softmax_expsum[(0)] = ((volatile  float*)red_buf0)[(0)];
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel1(float* __restrict__ T_softmax_exp, void* __restrict__ placeholder, float* __restrict__ T_softmax_maxelem) {
+  for (int i1 = 0; i1 < 10; ++i1) {
+    T_softmax_exp[(i1)] = __expf(((( float*)placeholder)[(i1)] - T_softmax_maxelem[(0)]));
+  }
+}
+
+extern "C" __global__ void fused_reshape_multiply_kernel0(void* __restrict__ T_multiply, void* __restrict__ placeholder) {
+  for (int ax0_ax1_fused_outer = 0; ax0_ax1_fused_outer < 7; ++ax0_ax1_fused_outer) {
+    if ((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)) < 1577088) {
+      (( float*)T_multiply)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))] = (( float*)placeholder)[((((ax0_ax1_fused_outer * 262144) + (((int)blockIdx.x) * 1024)) + ((int)threadIdx.x)))];
+    }
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel2(float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+   float T_softmax_expsum_rf[1];
+  __shared__ float red_buf0[64];
+  T_softmax_expsum_rf[(0)] = 0.000000e+00f;
+  if (((int)threadIdx.x) < 10) {
+    T_softmax_expsum_rf[(0)] = (T_softmax_expsum_rf[(0)] + T_softmax_exp[(((int)threadIdx.x))]);
+  }
+  __syncthreads();
+  ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = T_softmax_expsum_rf[(0)];
+  __syncthreads();
+  if (((int)threadIdx.x) < 32) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 32))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) < 16) {
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 16))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 8))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 4))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 2))]);
+    ((volatile  float*)red_buf0)[(((int)threadIdx.x))] = (((volatile  float*)red_buf0)[(((int)threadIdx.x))] + ((volatile  float*)red_buf0)[((((int)threadIdx.x) + 1))]);
+  }
+  __syncthreads();
+  if (((int)threadIdx.x) == 0) {
+    T_softmax_expsum[(0)] = ((volatile  float*)red_buf0)[(0)];
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel1(float* __restrict__ T_softmax_exp, void* __restrict__ placeholder, float* __restrict__ T_softmax_maxelem) {
+  for (int i1 = 0; i1 < 10; ++i1) {
+    T_softmax_exp[(i1)] = __expf(((( float*)placeholder)[(i1)] - T_softmax_maxelem[(0)]));
+  }
+}
+
+extern "C" __global__ void fused_nn_conv2d_add_nn_relu_kernel0(void* __restrict__ placeholder, void* __restrict__ placeholder1, void* __restrict__ T_relu, void* __restrict__ placeholder2) {
+   float compute[32];
+  __shared__ float pad_temp_shared[896];
+  __shared__ float placeholder_shared[288];
+  #pragma unroll
+  for (int ff_init = 0; ff_init < 2; ++ff_init) {
+    compute[(ff_init)] = 0.000000e+00f;
+    compute[((ff_init + 8))] = 0.000000e+00f;
+    compute[((ff_init + 16))] = 0.000000e+00f;
+    compute[((ff_init + 24))] = 0.000000e+00f;
+    compute[((ff_init + 4))] = 0.000000e+00f;
+    compute[((ff_init + 12))] = 0.000000e+00f;
+    compute[((ff_init + 20))] = 0.000000e+00f;
+    compute[((ff_init + 28))] = 0.000000e+00f;
+    compute[((ff_init + 2))] = 0.000000e+00f;
+    compute[((ff_init + 10))] = 0.000000e+00f;
+    compute[((ff_init + 18))] = 0.000000e+00f;
+    compute[((ff_init + 26))] = 0.000000e+00f;
+    compute[((ff_init + 6))] = 0.000000e+00f;
+    compute[((ff_init + 14))] = 0.000000e+00f;
+    compute[((ff_init + 22))] = 0.000000e+00f;
+    compute[((ff_init + 30))] = 0.000000e+00f;
+  }
+  #pragma unroll
+  for (int rc_outer = 0; rc_outer < 3; ++rc_outer) {
+    __syncthreads();
+    #pragma unroll
+    for (int ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner = 0; ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner < 3; ++ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) {
+      if (((((((int)threadIdx.x) * 3) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) / 224) + ((int)threadIdx.z)) < 4) {
+        if ((((((int)threadIdx.z) * 224) + (((int)threadIdx.x) * 3)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) < 896) {
+          if (((((int)threadIdx.x) * 3) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner) < 224) {
+            pad_temp_shared[((((((int)threadIdx.z) * 224) + (((int)threadIdx.x) * 3)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner))] = (( float*)placeholder)[((((((rc_outer * 50176) + (((int)blockIdx.y) * 448)) + (((int)threadIdx.z) * 224)) + (((int)threadIdx.x) * 3)) + ax0_ax1_fused_ax2_fused_ax3_fused_inner_inner_inner))];
+          }
+        }
+      }
+    }
+    if (((((int)threadIdx.z) * 8) + (((int)threadIdx.x) / 9)) < 32) {
+      if (((((int)threadIdx.z) * 24) + (((int)threadIdx.x) / 3)) < 96) {
+        if (((((int)threadIdx.z) * 72) + ((int)threadIdx.x)) < 288) {
+          if (((int)threadIdx.x) < 72) {
+            placeholder_shared[(((((int)threadIdx.z) * 72) + ((int)threadIdx.x)))] = (( float*)placeholder1)[(((((((int)threadIdx.z) * 216) + ((((int)threadIdx.x) / 9) * 27)) + (rc_outer * 9)) + (((int)threadIdx.x) % 9)))];
+          }
+        }
+      }
+    }
+    __syncthreads();
+    #pragma unroll
+    for (int ry_inner = 0; ry_inner < 3; ++ry_inner) {
+      #pragma unroll
+      for (int rx_inner = 0; rx_inner < 3; ++rx_inner) {
+        #pragma unroll
+        for (int ff = 0; ff < 2; ++ff) {
+          compute[(ff)] = (compute[(ff)] + (pad_temp_shared[((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[(((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner))]));
+          compute[((ff + 8))] = (compute[((ff + 8))] + (pad_temp_shared[((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 72))]));
+          compute[((ff + 16))] = (compute[((ff + 16))] + (pad_temp_shared[((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 144))]));
+          compute[((ff + 24))] = (compute[((ff + 24))] + (pad_temp_shared[((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 216))]));
+          compute[((ff + 4))] = (compute[((ff + 4))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 224))] * placeholder_shared[(((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner))]));
+          compute[((ff + 12))] = (compute[((ff + 12))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 224))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 72))]));
+          compute[((ff + 20))] = (compute[((ff + 20))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 224))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 144))]));
+          compute[((ff + 28))] = (compute[((ff + 28))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 224))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 216))]));
+          compute[((ff + 2))] = (compute[((ff + 2))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 111))] * placeholder_shared[(((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner))]));
+          compute[((ff + 10))] = (compute[((ff + 10))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 111))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 72))]));
+          compute[((ff + 18))] = (compute[((ff + 18))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 111))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 144))]));
+          compute[((ff + 26))] = (compute[((ff + 26))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 111))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 216))]));
+          compute[((ff + 6))] = (compute[((ff + 6))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 335))] * placeholder_shared[(((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner))]));
+          compute[((ff + 14))] = (compute[((ff + 14))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 335))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 72))]));
+          compute[((ff + 22))] = (compute[((ff + 22))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 335))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 144))]));
+          compute[((ff + 30))] = (compute[((ff + 30))] + (pad_temp_shared[(((((ry_inner * 224) + ((int)threadIdx.x)) + rx_inner) + 335))] * placeholder_shared[((((((((int)threadIdx.z) * 18) + (ff * 9)) + (ry_inner * 3)) + rx_inner) + 216))]));
+        }
+      }
+    }
+  }
+  #pragma unroll
+  for (int ax1_inner_inner_inner = 0; ax1_inner_inner_inner < 2; ++ax1_inner_inner_inner) {
+    (( float*)T_relu)[(((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)))] = max((compute[(ax1_inner_inner_inner)] + (( float*)placeholder2)[(((((int)threadIdx.z) * 2) + ax1_inner_inner_inner))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 394272))] = max((compute[((ax1_inner_inner_inner + 8))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 8))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 788544))] = max((compute[((ax1_inner_inner_inner + 16))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 16))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 1182816))] = max((compute[((ax1_inner_inner_inner + 24))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 24))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 222))] = max((compute[((ax1_inner_inner_inner + 4))] + (( float*)placeholder2)[(((((int)threadIdx.z) * 2) + ax1_inner_inner_inner))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 394494))] = max((compute[((ax1_inner_inner_inner + 12))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 8))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 788766))] = max((compute[((ax1_inner_inner_inner + 20))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 16))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 1183038))] = max((compute[((ax1_inner_inner_inner + 28))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 24))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 111))] = max((compute[((ax1_inner_inner_inner + 2))] + (( float*)placeholder2)[(((((int)threadIdx.z) * 2) + ax1_inner_inner_inner))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 394383))] = max((compute[((ax1_inner_inner_inner + 10))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 8))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 788655))] = max((compute[((ax1_inner_inner_inner + 18))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 16))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 1182927))] = max((compute[((ax1_inner_inner_inner + 26))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 24))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 333))] = max((compute[((ax1_inner_inner_inner + 6))] + (( float*)placeholder2)[(((((int)threadIdx.z) * 2) + ax1_inner_inner_inner))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 394605))] = max((compute[((ax1_inner_inner_inner + 14))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 8))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 788877))] = max((compute[((ax1_inner_inner_inner + 22))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 16))]), 0.000000e+00f);
+    (( float*)T_relu)[((((((((int)threadIdx.z) * 98568) + (ax1_inner_inner_inner * 49284)) + (((int)blockIdx.y) * 444)) + ((int)threadIdx.x)) + 1183149))] = max((compute[((ax1_inner_inner_inner + 30))] + (( float*)placeholder2)[((((((int)threadIdx.z) * 2) + ax1_inner_inner_inner) + 24))]), 0.000000e+00f);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel3(void* __restrict__ T_softmax_norm, float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+  if (((int)threadIdx.x) < 10) {
+    (( float*)T_softmax_norm)[(((int)threadIdx.x))] = (T_softmax_exp[(((int)threadIdx.x))] / T_softmax_expsum[(0)]);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel0(float* __restrict__ T_softmax_maxelem, void* __restrict__ placeholder) {
+  T_softmax_maxelem[(0)] = -3.402823e+38f;
+  for (int k = 0; k < 10; ++k) {
+    T_softmax_maxelem[(0)] = max(T_softmax_maxelem[(0)], (( float*)placeholder)[(k)]);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_kernel3(void* __restrict__ T_softmax_norm, float* __restrict__ T_softmax_exp, float* __restrict__ T_softmax_expsum) {
+  if (((int)threadIdx.x) < 10) {
+    (( float*)T_softmax_norm)[(((int)threadIdx.x))] = (T_softmax_exp[(((int)threadIdx.x))] / T_softmax_expsum[(0)]);
+  }
+}
+
+extern "C" __global__ void fused_nn_softmax_1_kernel0(float* __restrict__ T_softmax_maxelem, void* __restrict__ placeholder) {
+  T_softmax_maxelem[(0)] = -3.402823e+38f;
+  for (int k = 0; k < 10; ++k) {
+    T_softmax_maxelem[(0)] = max(T_softmax_maxelem[(0)], (( float*)placeholder)[(k)]);
+  }
+}
+
+
+Evaluate inference time cost...
+Mean inference time (std dev): 1.00 ms (0.04 ms)
